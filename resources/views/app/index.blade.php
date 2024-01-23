@@ -26,29 +26,33 @@
     <div class="body-content-overlay"></div>
 
     <section id="ecommerce-products" class="grid-view">
-        @foreach ($products ?? [] as $product)
+        @foreach ($books as $book)
             <div class="card ecommerce-card">
                 <div class="item-img text-center">
-                    <a href="{{ route('detail', $product->id) }}">
-                        <img class="img-fluid card-img-top" src="{{ $product->image }}" alt="img-placeholder" /></a>
+                    <a href="{{ route('book.show', ['slug' => $book->slug]) }}">
+                        <img class="img-fluid card-img-top" src="{{ $book->banner }}" alt="img-placeholder" /></a>
                 </div>
                 <div class="card-body">
                     <div class="item-wrapper">
                         <div class="item-rating">
                             <ul class="unstyled-list list-inline">
-                                {!! starRating($product->rate) !!}
+                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
                             </ul>
                         </div>
                         <div>
-                            <h6 class="item-price">{{ prettyPrice($product->price) }}</h6>
+                            <h6 class="item-price">{{ 'con hang' }}</h6>
                         </div>
                     </div>
                     <h6 class="item-name">
-                        <a class="text-body" href="{{ route('detail', $product->id) }}">{{ $product->name }}</a>
-                        <span class="card-text item-company">Bởi <a href="#" class="company-name">{{ $product->company_name }}</a></span>
+                        <a class="text-body" href="{{ route('book.show', ['slug' => $book->slug]) }}">{{ $book->title }}</a>
+                        <span class="card-text item-company">By <a href="#" class="company-name">{{ $book->author->name }}</a></span>
                     </h6>
                     <p class="card-text item-description">
-                        {{ $product->description }}
+                        There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing
                     </p>
                 </div>
                 <div class="item-options text-center">
@@ -57,9 +61,8 @@
                             <h4 class="item-price">$339.99</h4>
                         </div>
                     </div>
-                    <a href="#" data-id="{{ $product->id }}" class="btn-add_to_cart btn btn-primary btn-cart">
-                        <i data-feather="shopping-cart"></i>
-                        <span class="add-to-cart">Thêm vào giỏ hàng</span>
+                    <a href="{{ route('book.show', ['slug' => $book->slug]) }}" class=" btn btn-primary btn-cart">
+                        <span class="add-to-cart">Xem</span>
                     </a>
                 </div>
             </div>
@@ -71,19 +74,7 @@
     <section id="ecommerce-pagination">
         <div class="row">
             <div class="col-sm-12">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center mt-2">
-                        <li class="page-item prev-item"><a class="page-link" href="#"></a></li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item" aria-current="page"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#">5</a></li>
-                        <li class="page-item"><a class="page-link" href="#">6</a></li>
-                        <li class="page-item"><a class="page-link" href="#">7</a></li>
-                        <li class="page-item next-item"><a class="page-link" href="#"></a></li>
-                    </ul>
-                </nav>
+                {{ $books->links('vendor.pagination.bootstrap-5') }}
             </div>
         </div>
     </section>
@@ -112,5 +103,5 @@
 
 
 @section('script')
-    <script src={{ asset('app-assets/js/scripts/pages/app-ecommerce.js') }}></script>
+
 @endsection
