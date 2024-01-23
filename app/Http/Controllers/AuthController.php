@@ -51,5 +51,11 @@ class AuthController extends Controller
         return redirect()->route('auth.login')->with('success', 'Đăng ký thành công');
     }
 
+    public function logout(): RedirectResponse
+    {
+        Auth::logout();
+
+        return back();
+    }
 
 }
