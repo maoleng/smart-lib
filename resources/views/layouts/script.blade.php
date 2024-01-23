@@ -35,5 +35,16 @@
                 buttonsStyling: false
             });
         @endif
+        @if ($success = session('success'))
+            Swal.fire({
+                title: 'Success!',
+                text: '{{ $success }}',
+                icon: 'success',
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+        @endif
     })
 </script>

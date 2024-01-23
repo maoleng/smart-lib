@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Jobs\SendMail;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +17,11 @@ class AuthController extends Controller
     public function login()
     {
         return view('app.auth.login');
+    }
+
+    public function register()
+    {
+        return view('app.auth.register');
     }
 
     public function loginProcess(LoginRequest $request): RedirectResponse
@@ -30,5 +37,19 @@ class AuthController extends Controller
             'email' => 'Email or password is incorrect',
         ])->onlyInput('email');
     }
+
+    public function registerProcess(RegisterRequest $request): RedirectResponse
+    {
+        $data = $request->validated();
+        User::query()->create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['name']),
+            'role' => UserRole::USER,
+        ]);
+
+        return redirect()->route('auth.login')->with('success', 'Đăng ký thành công');
+    }
+
 
 }

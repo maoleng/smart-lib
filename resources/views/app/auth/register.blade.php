@@ -28,40 +28,40 @@
         <h2 class="brand-text text-primary ms-1">Smart Lib</h2>
     </a>
 
-    <h4 class="card-title mb-1">Welcome to Smart Lib! 👋</h4>
-    <p class="card-text mb-2">Please sign-in to your account and start the adventure</p>
+    <h4 class="card-title mb-1">Adventure starts here 🚀</h4>
+    <p class="card-text mb-2">Make your app management easy and fun!</p>
 
-    <form class="auth-login-form mt-2" action="{{ route('auth.login-process') }}" method="POST">
+    <form class="auth-register-form mt-2" action="{{ route('auth.register-process') }}" method="POST">
         @csrf
         <div class="mb-1">
-            <label for="login-email" class="form-label">Email</label>
-            <input value="{{ old('email') }}" type="text" class="form-control" id="login-email" name="email" placeholder="john@example.com" aria-describedby="login-email" tabindex="1" autofocus />
+            <label for="register-username" class="form-label">Name</label>
+            <input value="{{ old('name') }}" type="text" class="form-control" id="register-username" name="name" placeholder="johndoe" aria-describedby="register-username" tabindex="1" autofocus />
         </div>
         <div class="mb-1">
-            <div class="d-flex justify-content-between">
-                <label class="form-label" for="login-password">Password</label>
-                <a href="{{ route('auth.forget-password') }}">
-                    <small>Forgot Password?</small>
-                </a>
-            </div>
+            <label for="register-email" class="form-label">Email</label>
+            <input value="{{ old('email') }}" type="text" class="form-control" id="register-email" name="email" placeholder="john@example.com" aria-describedby="register-email" tabindex="2" />
+        </div>
+        <div class="mb-1">
+            <label for="register-password" class="form-label">Password</label>
             <div class="input-group input-group-merge form-password-toggle">
-                <input type="password" class="form-control form-control-merge" id="login-password" name="password" tabindex="2" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="login-password" />
+                <input type="password" class="form-control form-control-merge" id="register-password" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="register-password" tabindex="3" />
                 <span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>
             </div>
         </div>
         <div class="mb-1">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="remember-me" tabindex="3" />
-                <label class="form-check-label" for="remember-me"> Remember Me </label>
+            <label for="register-password" class="form-label">Confirm Password</label>
+            <div class="input-group input-group-merge form-password-toggle">
+                <input type="password" class="form-control form-control-merge" id="register-password" name="password_confirmation" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="register-password" tabindex="3" />
+                <span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>
             </div>
         </div>
-        <button class="btn btn-primary w-100" tabindex="4">Sign in</button>
+        <button class="btn btn-primary w-100" tabindex="5">Sign up</button>
     </form>
 
     <p class="text-center mt-2">
-        <span>New on our platform?</span>
-        <a href="{{ route('auth.register') }}">
-            <span>Create an account</span>
+        <span>Already have an account?</span>
+        <a href="{{ route('auth.login') }}">
+            <span>Sign in instead</span>
         </a>
     </p>
 @endsection
