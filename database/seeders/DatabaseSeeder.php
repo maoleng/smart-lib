@@ -3,9 +3,11 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Enums\UserRole;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Factory;
 use Illuminate\Support\Str;
@@ -17,6 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->createUser();
         $this->createCategory();
         $this->createAuthor();
         $this->createBook();
@@ -78,6 +81,16 @@ class DatabaseSeeder extends Seeder
         }
 
         Book::query()->insert($books);
+    }
+
+    private function createUser(): void
+    {
+        User::query()->create([
+            'name' => 'Tài khoản admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('123456'),
+            'role' => UserRole::ADMIN,
+        ]);
     }
 
 }

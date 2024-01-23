@@ -27,7 +27,7 @@ class AuthController extends Controller
     public function loginProcess(LoginRequest $request): RedirectResponse
     {
         $credentials = $request->validated();
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $request['remember'] === 'on')) {
             $request->session()->regenerate();
 
             return redirect()->route('index');

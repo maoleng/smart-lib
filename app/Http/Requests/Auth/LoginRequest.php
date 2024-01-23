@@ -16,7 +16,10 @@ class LoginRequest extends BaseRequest
             ],
             'password' => [
                 'required',
-            ]
+            ],
+            'remember' => [
+                'nullable',
+            ],
         ];
     }
 
