@@ -1,4 +1,6 @@
-<div>
+@extends('layouts.app')
+
+@section('content')
     <section id="ecommerce-header">
         <div class="row">
             <div class="col-sm-12">
@@ -85,7 +87,7 @@
             </div>
         </div>
     </section>
-</div>
+@endsection
 
 
 @section('vendor_css')
