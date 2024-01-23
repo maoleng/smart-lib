@@ -6,6 +6,8 @@
 
 <!-- BEGIN: Page Vendor JS-->
 @yield('vendor_script')
+<script src="{{ asset('app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/extensions/polyfill.min.js') }}"></script>
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->
@@ -14,7 +16,6 @@
 <!-- END: Theme JS-->
 
 @yield('script')
-
 <script>
     $(window).on('load', function() {
         if (feather) {
@@ -23,5 +24,16 @@
                 height: 14
             });
         }
+        @if ($errors->any())
+            Swal.fire({
+                title: 'Error!',
+                text: '{{ $errors->first() }}',
+                icon: 'error',
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+        @endif
     })
 </script>
