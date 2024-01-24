@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
-class OverdueBookReminderCommand extends Command
+class OverdueReturnBookReminderCommand extends Command
 {
 
     protected $signature = 'app:mail-overdue-book';
