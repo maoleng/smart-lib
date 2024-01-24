@@ -38,7 +38,7 @@ class Book extends Model
 
     public function getStatusAttribute(): string
     {
-        $book_instances = $this->bookInstances()->get();
+        $book_instances = $this->bookInstances;
 
         $user = Auth::user();
         if (!$user) {
@@ -47,7 +47,7 @@ class Book extends Model
                 : 'Available';
         }
 
-        $last_borrow = Borrow::query()->whereIn('book_instance_id', $book_instances->pluck('id')->toArray())
+        $last_borrow = Borrow::query()->whereIn('book_instance_id', $book_instances->pluck('id'))
             ->where('user_id', $user->id)->orderByDesc('book_at')->first();
 
         if (!$last_borrow || $last_borrow->bookInstance->status === BookStatus::RETURNED) {
