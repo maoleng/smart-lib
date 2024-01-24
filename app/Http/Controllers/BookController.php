@@ -10,7 +10,7 @@ class BookController extends Controller
     public function show($slug)
     {
         $book = Book::query()->where('slug', $slug)->firstOrFail();
-        $related_books = Book::query()->limit(5)->get();
+        $related_books = Book::query()->with(['author', 'category'])->limit(5)->get();
 
         return view('app.book-detail', [
             'book' => $book,
