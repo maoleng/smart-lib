@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('book_instance_id')->constrained();
-            $table->integer('status');
             $table->dateTime('book_at');
-            $table->dateTime('borrow_at');
-            $table->dateTime('expected_return_at');
-            $table->dateTime('actual_return_at');
+            $table->dateTime('borrow_at')->nullable();
+            $table->dateTime('expected_return_at')->nullable();
+            $table->dateTime('actual_return_at')->nullable();
         });
     }
 

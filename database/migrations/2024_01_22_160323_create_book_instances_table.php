@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('book_instances', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
             $table->integer('status');
             $table->foreignId('book_id')->constrained();
         });

@@ -44,7 +44,7 @@
                             </ul>
                         </div>
                         <div>
-                            <h6 class="item-price">{{ 'con hang' }}</h6>
+                            <h6 class="item-price">{{ $book->category->name }}</h6>
                         </div>
                     </div>
                     <h6 class="item-name">

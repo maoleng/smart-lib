@@ -15,7 +15,7 @@
                         <h4>{{ $book->title }}</h4>
                         <span class="card-text item-company">By <a href="#" class="company-name">{{ $book->author->name }}</a></span>
                         <div class="ecommerce-details-price d-flex flex-wrap mt-1">
-                            <h4 class="item-price me-1">{{ 'con ahng' }}</h4>
+                            <h4 class="item-price me-1">{{ $book->status }}</h4>
                             <ul class="unstyled-list list-inline ps-1 border-start">
                                 <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
                                 <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>

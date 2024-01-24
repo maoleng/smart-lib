@@ -3,11 +3,15 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Enums\BookStatus;
 use App\Enums\UserRole;
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\BookInstance;
+use App\Models\Borrow;
 use App\Models\Category;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Factory;
 use Illuminate\Support\Str;
@@ -54,8 +58,12 @@ class DatabaseSeeder extends Seeder
         $faker = Factory::create();
         $category_ids = Category::query()->pluck('id')->toArray();
         $author_ids = Author::query()->pluck('id')->toArray();
+        $user_ids = User::query()->pluck('id')->toArray();
 
+        $book_instances_id = 0;
         $books = [];
+        $book_instances = [];
+        $borrows = [];
         for ($i = 1; $i <= 12; $i++) {
             $title = $faker->sentence(3);
             $banner = $i < 10 ?
@@ -78,19 +86,59 @@ class DatabaseSeeder extends Seeder
                 'category_id' => $faker->randomElement($category_ids),
                 'author_id' => $faker->randomElement($author_ids),
             ];
+            $instances = random_int(10, 15);
+            for ($j = 1; $j <= $instances; $j++) {
+                $status = BookStatus::getRandomValue();
+                $book_instances[] = [
+                    'status' => $status,
+                    'code' => strtoupper(Str::random(4)),
+                    'book_id' => $i,
+                ];
+                $borrows[] = [
+                    'user_id' => $faker->randomElement($user_ids),
+                    'book_instance_id' => ++$book_instances_id,
+                    'book_at' => $book_at = $faker->dateTimeBetween('-30 days'),
+                    'borrow_at' => match($status) {
+                        BookStatus::WAIT_TO_PICK_UP, BookStatus::NOT_PICK_UP => null,
+                        BookStatus::BORROWING, BookStatus::RETURNED, BookStatus::EXPIRED => Carbon::make($book_at)->subDay(),
+                    },
+                    'expected_return_at' => match($status) {
+                        BookStatus::WAIT_TO_PICK_UP, BookStatus::NOT_PICK_UP => null,
+                        BookStatus::BORROWING, BookStatus::RETURNED, BookStatus::EXPIRED => Carbon::make($book_at)->subDay()->addMonth(),
+                    },
+                    'actual_return_at' => match($status) {
+                        BookStatus::RETURNED => Carbon::make($book_at)->subDay()->addDays(random_int(10, 20)),
+                        default => null,
+                    },
+                ];
+            }
         }
 
         Book::query()->insert($books);
+        BookInstance::query()->insert($book_instances);
+        Borrow::query()->insert($borrows);
     }
 
     private function createUser(): void
     {
+        $faker = Factory::create();
         User::query()->create([
             'name' => 'Tài khoản admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('123456'),
             'role' => UserRole::ADMIN,
         ]);
+        $users = [];
+        for ($i = 0; $i < 10; $i++) {
+            $users[] = [
+                'name' => $faker->name,
+                'email' => $faker->email,
+                'password' => bcrypt('123456'),
+                'role' => UserRole::USER,
+            ];
+        }
+
+        User::query()->insert($users);
     }
 
 }
