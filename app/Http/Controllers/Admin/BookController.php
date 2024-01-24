@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Book\UpdateRequest;
+use App\Http\Requests\BookRequest;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BookController extends Controller
 {
@@ -27,7 +28,7 @@ class BookController extends Controller
             $query->whereIn('author_id', $author_ids);
         }
 
-        $books = $query->with(['author', 'category'])->withCount('bookInstances')->paginate(7);
+        $books = $query->with(['author', 'category'])->withCount('bookInstances')->orderByDesc('created_at')->paginate(7);
 
         return view('app.book.index', [
             'books' => $books,
@@ -36,13 +37,24 @@ class BookController extends Controller
         ]);
     }
 
-    public function update(UpdateRequest $request, Book $book): RedirectResponse
+    public function store(BookRequest $request): RedirectResponse
     {
         $data = $request->validated();
+        $data['banner'] = $request->file('banner')->store('banners');
+        $data['slug'] = Str::slug($data['title']);
+
+        Book::query()->create($data);
+
+        return back()->with('success', 'Create book successfully');
+    }
+
+    public function update(BookRequest $request, Book $book): RedirectResponse
+    {
+        $data = $request->validated();
+        $data['slug'] = Str::slug($data['title']);
 
         if (isset($data['banner'])) {
-            $file = $request->file('banner');
-            $data['banner'] = $file->storeAs('banners', "$book->id.{$file->extension()}");
+            $data['banner'] = $request->file('banner')->store('banners');
         }
 
         $book->update($data);

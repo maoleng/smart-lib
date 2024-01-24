@@ -4,6 +4,27 @@
     <div class="card">
         <div class="card-header">
             <h4 class="card-title">Manage Book</h4>
+            <button data-bs-toggle="modal" data-bs-target="#modal-create-book" type="button" class="btn btn-primary waves-effect waves-float waves-light">
+                Create book
+            </button>
+            <div class="modal fade" id="modal-create-book" tabindex="-1" aria-labelledby="addNewAddressTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-transparent">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body pb-5 px-sm-4 mx-50">
+                            <h1 class="address-title text-center mb-1" id="addNewAddressTitle">Create Book</h1>
+
+                            <form action="{{ route('admin.book.store') }}" method="post" enctype="multipart/form-data" class="row gy-1 gx-2">
+                                @csrf
+                                @method('PUT')
+                                @include('app.book.form')
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="row card-body">
@@ -80,58 +101,7 @@
                                                 <form action="{{ route('admin.book.update', ['book' => $book]) }}" method="post" enctype="multipart/form-data" class="row gy-1 gx-2">
                                                     @csrf
                                                     @method('PUT')
-                                                    <div class="div-banner">
-                                                        <p>Use this banner</p>
-                                                        <div class="d-flex justify-content-center">
-                                                            <img class="img-fluid pb-5" width="170px" src="{{ $book->bannerUrl }}">
-                                                        </div>
-                                                        <div class="col-12 pb-2">
-                                                            <div class="form-floating">
-                                                                <input name="banner" type="file" class="form-control" id="floating-label1" placeholder="Or choose another banner" />
-                                                                <label for="floating-label1">Or choose another banner</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12 pb-2">
-                                                        <div class="form-floating">
-                                                            <input name="title" value="{{ $book->title }}" type="text" class="form-control" id="floating-label1" placeholder="Tiêu đề" />
-                                                            <label for="floating-label1">Title</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12 pb-2">
-                                                        <div class="form-floating">
-                                                            <textarea name="description" class="form-control" placeholder="" id="floatingTextarea2" style="height: 200px">{{ $book->description }}</textarea>
-                                                            <label for="floatingTextarea2">Description</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-floating">
-                                                            <input name="ISBN" value="{{ $book->ISBN }}" type="text" class="form-control" id="floating-label1" placeholder="ISBN"/>
-                                                            <label for="floating-label1">ISBN</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <label class="form-check-label" for="select2-author-{{ $book->id }}">Author</label>
-                                                        <select name="author_id" class="select2 form-select" id="select2-author-{{ $book->id }}">
-                                                            @foreach($authors as $author)
-                                                                <option {{ $author->id === $book->author_id ? 'selected' : '' }} value="{{ $author->id }}">{{ $author->name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <label class="form-check-label" for="select2-category-{{ $book->id }}">Category</label>
-                                                        <select name="category_id" class="select2 form-select" id="select2-category-{{ $book->id }}">
-                                                            @foreach($categories as $category)
-                                                                <option {{ $category->id === $book->category_id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-12 text-center">
-                                                        <button type="submit" class="btn btn-primary me-1 mt-2">Update</button>
-                                                        <button type="reset" class="btn btn-outline-secondary mt-2" data-bs-dismiss="modal" aria-label="Close">
-                                                            Cancel
-                                                        </button>
-                                                    </div>
+                                                    @include('app.book.form')
                                                 </form>
                                             </div>
                                         </div>

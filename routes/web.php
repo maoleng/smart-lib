@@ -27,6 +27,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => [MustLogin:
     });
     Route::group(['prefix' => 'book', 'as' => 'book.'], function () {
         Route::get('/', [BookController::class, 'index'])->name('index');
+        Route::put('/', [BookController::class, 'store'])->name('store');
         Route::put('/{book}', [BookController::class, 'update'])->name('update');
     });
 });
