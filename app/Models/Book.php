@@ -40,18 +40,23 @@ class Book extends Model
     {
         $book_instances = $this->bookInstances;
 
-        $user = Auth::user();
-        if (!$user) {
-            return $book_instances->where('status', BookStatus::RETURNED)->isEmpty()
-                ? 'Unavailable'
-                : 'Available';
+        if ($book_instances->isEmpty()) {
+            return 'Unavailable';
         }
 
-        $last_borrow = Borrow::query()->whereIn('book_instance_id', $book_instances->pluck('id'))
-            ->where('user_id', $user->id)->orderByDesc('book_at')->first();
+        $has_free_book = $book_instances->where('status', BookStatus::RETURNED)->isNotEmpty();
+        $user = Auth::user();
+        if (!$user) {
+            return $has_free_book ? 'Available' : 'Unavailable';
+        }
 
-        if (!$last_borrow || $last_borrow->bookInstance->status === BookStatus::RETURNED) {
-            return 'Available';
+        $last_borrow = Borrow::query()->where('user_id', $user->id)
+            ->whereHas('bookInstance.book', function ($q) {
+                $q->where('id', $this->id);
+            })->with('bookInstance')->orderByDesc('book_at')->first();
+
+        if (!$last_borrow) {
+            return $has_free_book ? 'Available' : 'Unavailable';
         }
 
         return match ($last_borrow->bookInstance->status) {
