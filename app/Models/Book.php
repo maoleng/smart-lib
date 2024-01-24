@@ -59,10 +59,8 @@ class Book extends Model
             return $has_free_book ? 'Available' : 'Unavailable';
         }
 
-        return match ($last_borrow->bookInstance->status) {
-            BookStatus::WAIT_TO_PICK_UP => 'Wait to pick up',
-            BookStatus::BORROWING => 'Borrowing',
-            BookStatus::EXPIRED => 'Borrowing (Please return book)',
+        return match ($status = $last_borrow->bookInstance->status) {
+            BookStatus::WAIT_TO_PICK_UP, BookStatus::BORROWING, BookStatus::EXPIRED => BookStatus::getDescription($status),
             default => 'Available',
         };
     }

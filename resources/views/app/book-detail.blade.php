@@ -1,3 +1,5 @@
+@php use \Illuminate\Support\Facades\Auth; @endphp
+
 @extends('layouts.app')
 
 @section('content')
@@ -31,11 +33,20 @@
                         {!! $book->description !!}
                         <hr/>
                         <div class="d-flex flex-column flex-sm-row pt-1">
-                            <a href="#"
-                               class="btn {{ $status !== 'Available' ? 'disabled' : '' }} btn-primary btn-cart me-0 me-sm-1 mb-1 mb-sm-0">
-                                <i data-feather="arrow-down-circle" class="me-50"></i>
-                                <span>Book now</span>
-                            </a>
+                            @if (Auth::check())
+                                <form action="{{ route('borrow.store', ['book' => $book]) }}" method="post">
+                                    @csrf
+                                    <button class="btn {{ $status !== 'Available' ? 'disabled' : '' }} btn-primary btn-cart me-0 me-sm-1 mb-1 mb-sm-0">
+                                        <i data-feather="arrow-down-circle" class="me-50"></i>
+                                        Borrow now
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('auth.login') }}" class="btn btn-primary btn-cart me-0 me-sm-1 mb-1 mb-sm-0">
+                                    <span>Login for Borrow</span>
+                                </a>
+                            @endif
+
                             <div class="btn-group dropdown-icon-wrapper btn-share">
                                 <button type="button"
                                         class="btn btn-icon hide-arrow btn-outline-secondary dropdown-toggle"

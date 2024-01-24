@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\SiteController;
 use App\Http\Middleware\MustLogin;
 use App\Http\Middleware\MustNotLogin;
@@ -18,5 +19,5 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], static function () {
     });
     Route::get('/logout', [AuthController::class, 'logout'])->middleware(MustLogin::class)->name('logout');
 });
-
+Route::post('/borrow/{book}', [BorrowController::class, 'store'])->name('borrow.store');
 Route::get('/{slug}', [BookController::class, 'show'])->name('book.show');
