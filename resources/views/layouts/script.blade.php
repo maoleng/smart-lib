@@ -24,27 +24,22 @@
                 height: 14
             });
         }
-        @if ($errors->any())
+        @php
+            $error = $errors->any() ? $errors->first() : session('error');
+            $success = session('success');
+        @endphp
+
+        @if ($error || $success)
             Swal.fire({
-                title: 'Error!',
-                text: '{{ $errors->first() }}',
-                icon: 'error',
+                title: '{{ $error ? "Error" : "Success" }}!',
+                text: '{{ $error ?: $success }}',
+                icon: '{{ $error ? "error" : "success" }}',
                 customClass: {
                     confirmButton: 'btn btn-primary'
                 },
                 buttonsStyling: false
             });
         @endif
-        @if ($success = session('success'))
-            Swal.fire({
-                title: 'Success!',
-                text: '{{ $success }}',
-                icon: 'success',
-                customClass: {
-                    confirmButton: 'btn btn-primary'
-                },
-                buttonsStyling: false
-            });
-        @endif
+
     })
 </script>

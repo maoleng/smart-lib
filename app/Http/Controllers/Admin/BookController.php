@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\BookStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookRequest;
 use App\Models\Author;
@@ -60,6 +61,19 @@ class BookController extends Controller
         $book->update($data);
 
         return back()->with('success', 'Update book successfully');
+    }
+
+    public function destroy(Book $book): void
+    {
+        if ($book->bookInstances()->whereIn('status', [BookStatus::BORROWING, BookStatus::EXPIRED])->get()->isNotEmpty()) {
+            session()->flash('error', 'There are book that still being borrowing');
+
+            return;
+        }
+        $book->bookInstances()->delete();
+        $book->delete();
+
+        session()->flash('success', 'Delete book successfully');
     }
 
 }
