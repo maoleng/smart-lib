@@ -6,15 +6,13 @@
                 <a class="navbar-brand" href="{{ route('index') }}">
                     <span class="brand-logo">
                     </span>
-                    <h2 class="brand-text mb-0">Smart Lib</h2>
+                    <h2 class="brand-text mb-0">Smart Lib {{ Route::is('admin.*') ? '- Admin Area' : '' }}</h2>
                 </a>
             </li>
         </ul>
     </div>
     <div class="navbar-container d-flex content">
         <ul class="nav navbar-nav align-items-center ms-auto">
-            <li class="nav-item dropdown dropdown-cart me-25"><a class="" href="#"><i class="ficon" data-feather="shopping-cart"></i></a></li>
-
             <li class="nav-item dropdown dropdown-user">
                 @if (Auth::check())
                     <a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -23,7 +21,14 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
                         <a class="dropdown-item" href="page-profile.html">
-                            <i class="me-50" data-feather="user"></i> Profile</a>
+                            <i class="me-50" data-feather="user"></i> Profile
+                        </a>
+                        @if (Auth::user()->role === \App\Enums\UserRole::ADMIN)
+                            <a class="dropdown-item" href="{{ route('admin.user.index') }}">
+                                <i class="me-50" data-feather="settings"></i> Admin Area
+                            </a>
+                        @endif
+
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('auth.logout') }}"><i class="me-50" data-feather="power"></i> Logout</a>
                     </div>
