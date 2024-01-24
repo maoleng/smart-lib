@@ -8,24 +8,13 @@
 
     Please return the book as soon as possible to avoid any additional charges. If you have already returned the book, kindly disregard this email.
 
-    <table style="border-collapse: collapse;width: 100%">
-        <thead>
-        <tr>
-            <th style="border: 1px solid #000;">Book</th>
-            <th style="border: 1px solid #000;">Borrow Date</th>
-            <th style="border: 1px solid #000;">Due Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($borrows as $borrow)
-            <tr>
-                <td style="border: 1px solid #000;">{{ $borrow->bookInstance->book->title }}</td>
-                <td style="border: 1px solid #000;">{{ Carbon::make($borrow->borrow_at)->toDateString() }}</td>
-                <td style="border: 1px solid #000;">{{ Carbon::make($borrow->expected_return_at)->toDateString() }}</td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
+@component('mail::table')
+| No.  | Book                               | Borrow Date      | Due Date           |
+|:----:|:----------------------------------:|:----------------:|:------------------:|
+@foreach($borrows as $i => $borrow)
+| {{ $i + 1 }} | {{ $borrow->bookInstance->book->title }} | {{ Carbon::make($borrow->borrow_at)->toDateString() }} | {{ Carbon::make($borrow->expected_return_at)->toDateString() }}
+@endforeach
+@endcomponent
 
 
     Thank you for your prompt attention to this matter.
