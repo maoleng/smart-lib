@@ -3,7 +3,7 @@
     <div class="navbar-header d-xl-block d-none">
         <ul class="nav navbar-nav">
             <li class="nav-item">
-                <a class="navbar-brand" href="{{ route('index') }}">
+                <a class="navbar-brand" href="{{ route(Route::is('admin.*') ? 'admin.user.index' : 'index') }}">
                     <span class="brand-logo">
                     </span>
                     <h2 class="brand-text mb-0">Smart Lib {{ Route::is('admin.*') ? '- Admin Area' : '' }}</h2>

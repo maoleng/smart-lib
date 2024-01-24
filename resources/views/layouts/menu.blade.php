@@ -38,7 +38,7 @@
             <!-- include includes/mixins-->
             <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
                 @if (Route::is('admin.*'))
-                    <li class="dropdown nav-item sidebar-group-active" data-menu=""><a class="dropdown-item d-flex align-items-center" href="{{ route('index') }}" data-i18n="File Manager"><i data-feather="home"></i><span data-i18n="Dashboard">Dashboard</span></a></li>
+                    <li class="dropdown nav-item sidebar-group-active" data-menu=""><a class="dropdown-item d-flex align-items-center" href="javascript:void(0)" data-i18n="File Manager"><i data-feather="home"></i><span data-i18n="Dashboard">Dashboard</span></a></li>
                     <li class="{{ Route::is('admin.user.*') ? 'active' : '' }} dropdown nav-item sidebar-group-active" data-menu=""><a class="dropdown-item d-flex align-items-center" href="{{ route('admin.user.index') }}" data-i18n="File Manager"><i data-feather="user"></i><span data-i18n="File Manager">Manage User</span></a></li>
                     <li class="{{ Route::is('admin.book.*') ? 'active' : '' }} dropdown nav-item sidebar-group-active" data-menu=""><a class="dropdown-item d-flex align-items-center" href="{{ route('admin.book.index') }}" data-i18n="File Manager"><i data-feather="book"></i><span data-i18n="File Manager">Manage Book</span></a></li>
                 @else
