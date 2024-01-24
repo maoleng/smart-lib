@@ -18,7 +18,6 @@
 
                             <form action="{{ route('admin.book.store') }}" method="post" enctype="multipart/form-data" class="row gy-1 gx-2">
                                 @csrf
-                                @method('PUT')
                                 @include('app.book.form')
                             </form>
                         </div>
@@ -78,7 +77,9 @@
                             </td>
                             <td>{{ $book->title }}</td>
                             <td>{{ $book->ISBN }}</td>
-                            <td>{{ $book->book_instances_count }} books</td>
+                            <td>
+                                <a href="{{ route('admin.book.show', ['book' => $book]) }}">{{ $book->book_instances_count }} books</a>
+                            </td>
                             <td>{{ $book->category->name }}</td>
                             <td>{{ $book->author->name }}</td>
                             <td>{{ $book->created_at }}</td>

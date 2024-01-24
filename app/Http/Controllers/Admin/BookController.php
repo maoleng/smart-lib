@@ -38,6 +38,16 @@ class BookController extends Controller
         ]);
     }
 
+    public function show(Book $book)
+    {
+        $book_instances = $book->bookInstances()->paginate(9);
+
+        return view('app.book.show', [
+            'book' => $book,
+            'book_instances' => $book_instances,
+        ]);
+    }
+
     public function store(BookRequest $request): RedirectResponse
     {
         $data = $request->validated();
@@ -70,6 +80,10 @@ class BookController extends Controller
 
             return;
         }
+
+        $book->bookInstances()->each(function ($instance) {
+            $instance->borrows()->delete();
+        });
         $book->bookInstances()->delete();
         $book->delete();
 

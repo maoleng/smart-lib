@@ -7,21 +7,21 @@ use BenSampo\Enum\Enum;
 
 final class BookStatus extends Enum
 {
-    #[Description('This book is waiting to be picked up')]
+    #[Description('User wait to pick up')]
     const WAIT_TO_PICK_UP = 0;
-    const NOT_PICK_UP = 1;
-    #[Description('You are borrowing this book')]
-    const BORROWING = 2;
-    const RETURNED = 3; //available
-    #[Description('You are borrowing this book, but it expired, please return back')]
-    const EXPIRED = 4;
+    #[Description('User is borrowing')]
+    const BORROWING = 1;
+    #[Description('Available')]
+    const RETURNED = 2;
+    #[Description('User is borrowing, but it is out of borrowing time')]
+    const EXPIRED = 3;
 
-    public static function getBookStatusDescription($status): string
+    public static function getEndUserDescription($status): string
     {
         return match ($status) {
-            self::WAIT_TO_PICK_UP => 'Wait to pick up',
-            self::BORROWING => 'Borrowing',
-            self::EXPIRED => 'Borrowing (Please return book)',
+            self::WAIT_TO_PICK_UP => 'This book is waiting to be picked up',
+            self::BORROWING => 'You are borrowing this book',
+            self::EXPIRED => 'You are borrowing this book, but it expired, please return back',
             default => 'Available',
         };
     }

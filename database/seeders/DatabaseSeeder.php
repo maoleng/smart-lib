@@ -99,11 +99,11 @@ class DatabaseSeeder extends Seeder
                     'book_instance_id' => ++$book_instances_id,
                     'book_at' => $book_at = $faker->dateTimeBetween('-30 days'),
                     'borrow_at' => match($status) {
-                        BookStatus::WAIT_TO_PICK_UP, BookStatus::NOT_PICK_UP => null,
+                        BookStatus::WAIT_TO_PICK_UP,
                         BookStatus::BORROWING, BookStatus::RETURNED, BookStatus::EXPIRED => Carbon::make($book_at)->subDay(),
                     },
                     'expected_return_at' => match($status) {
-                        BookStatus::WAIT_TO_PICK_UP, BookStatus::NOT_PICK_UP => null,
+                        BookStatus::WAIT_TO_PICK_UP,
                         BookStatus::BORROWING, BookStatus::RETURNED, BookStatus::EXPIRED => Carbon::make($book_at)->subDay()->addMonth(),
                     },
                     'actual_return_at' => match($status) {
