@@ -17,6 +17,12 @@
 
 @yield('script')
 <script>
+    function appendParams(key, value)
+    {
+        const url = new URL(window.location.href);
+        url.searchParams.set(key, value);
+        window.location.href = url.toString();
+    }
     $(window).on('load', function() {
         if (feather) {
             feather.replace({
@@ -24,6 +30,7 @@
                 height: 14
             });
         }
+
         @php
             $error = $errors->any() ? $errors->first() : session('error');
             $success = session('success');
