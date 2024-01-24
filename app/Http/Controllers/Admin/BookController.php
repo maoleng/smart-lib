@@ -19,6 +19,12 @@ class BookController extends Controller
     {
         $query = Book::query();
 
+        if ($search = $request->get('q')) {
+            $query->where(function ($q) use ($search) {
+                $q->orWhere('title', 'LIKE', "%$search%")->orWhere('ISBN', 'LIKE', "%$search%");
+            });
+        }
+
         $category_ids = explode(',', $request->get('category_ids'));
         if ($category_ids && $category_ids !== ['']) {
             $query->whereIn('category_id', $category_ids);
