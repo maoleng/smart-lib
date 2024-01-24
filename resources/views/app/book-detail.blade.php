@@ -10,7 +10,7 @@
                 <div class="row my-2">
                     <div class="col-12 col-md-5 d-flex align-items-center justify-content-center mb-2 mb-md-0">
                         <div class="d-flex align-items-center justify-content-center">
-                            <img src="{{ $book->banner }}" class="img-fluid product-img" alt="product image"/>
+                            <img src="{{ $book->bannerUrl }}" class="img-fluid product-img" alt="product image"/>
                         </div>
                     </div>
                     <div class="col-12 col-md-7">
@@ -119,7 +119,7 @@
                                         <small class="text-body">by {{ $book->author->name }}</small>
                                     </div>
                                     <div class="img-container w-50 mx-auto py-75">
-                                        <img src="{{ $book->banner }}" class="img-fluid" alt="image"/>
+                                        <img src="{{ $book->bannerUrl }}" class="img-fluid" alt="image"/>
                                     </div>
                                     <div class="item-meta">
                                         <ul class="unstyled-list list-inline mb-25">

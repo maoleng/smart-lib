@@ -36,6 +36,11 @@ class Book extends Model
         return $this->hasMany(BookInstance::class);
     }
 
+    public function getBannerUrlAttribute()
+    {
+        return str_starts_with($this->banner, 'http') ? $this->banner : asset($this->banner);
+    }
+
     public function getStatusAttribute(): string
     {
         $book_instances = $this->bookInstances;

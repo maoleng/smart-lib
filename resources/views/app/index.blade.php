@@ -30,7 +30,7 @@
             <div class="card ecommerce-card">
                 <div class="item-img text-center">
                     <a href="{{ route('book.show', ['slug' => $book->slug]) }}">
-                        <img class="img-fluid card-img-top" src="{{ $book->banner }}" alt="img-placeholder" /></a>
+                        <img class="img-fluid card-img-top" src="{{ $book->bannerUrl }}" alt="img-placeholder" /></a>
                 </div>
                 <div class="card-body">
                     <div class="item-wrapper">

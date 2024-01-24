@@ -46,13 +46,14 @@
                         <th>Category</th>
                         <th>Author</th>
                         <th>Created At</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach ($books as $book)
                         <tr data-id="{{ $book->id }}">
                             <td>
-                                <img src="{{ $book->banner }}" class="rounded me-1" height="170" alt="#" />
+                                <img src="{{ $book->bannerUrl }}" class="rounded me-1" height="170" alt="#" />
                             </td>
                             <td>{{ $book->title }}</td>
                             <td>{{ $book->ISBN }}</td>
@@ -60,6 +61,83 @@
                             <td>{{ $book->category->name }}</td>
                             <td>{{ $book->author->name }}</td>
                             <td>{{ $book->created_at }}</td>
+                            <td>
+                                <a class="me-1" href="#" data-bs-toggle="modal" data-bs-target="#edit-{{ $book->id }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send font-medium-2 text-body">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                </a>
+                                <div class="modal fade" id="edit-{{ $book->id }}" tabindex="-1" aria-labelledby="addNewAddressTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-transparent">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body pb-5 px-sm-4 mx-50">
+                                                <h1 class="address-title text-center mb-1" id="addNewAddressTitle">Edit Book</h1>
+
+                                                <form action="{{ route('admin.book.update', ['book' => $book]) }}" method="post" enctype="multipart/form-data" class="row gy-1 gx-2">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="div-banner">
+                                                        <p>Use this banner</p>
+                                                        <div class="d-flex justify-content-center">
+                                                            <img class="img-fluid pb-5" width="170px" src="{{ $book->bannerUrl }}">
+                                                        </div>
+                                                        <div class="col-12 pb-2">
+                                                            <div class="form-floating">
+                                                                <input name="banner" type="file" class="form-control" id="floating-label1" placeholder="Or choose another banner" />
+                                                                <label for="floating-label1">Or choose another banner</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 pb-2">
+                                                        <div class="form-floating">
+                                                            <input name="title" value="{{ $book->title }}" type="text" class="form-control" id="floating-label1" placeholder="Tiêu đề" />
+                                                            <label for="floating-label1">Title</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 pb-2">
+                                                        <div class="form-floating">
+                                                            <textarea name="description" class="form-control" placeholder="" id="floatingTextarea2" style="height: 200px">{{ $book->description }}</textarea>
+                                                            <label for="floatingTextarea2">Description</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-floating">
+                                                            <input name="ISBN" value="{{ $book->ISBN }}" type="text" class="form-control" id="floating-label1" placeholder="ISBN"/>
+                                                            <label for="floating-label1">ISBN</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label class="form-check-label" for="select2-author-{{ $book->id }}">Author</label>
+                                                        <select name="author_id" class="select2 form-select" id="select2-author-{{ $book->id }}">
+                                                            @foreach($authors as $author)
+                                                                <option {{ $author->id === $book->author_id ? 'selected' : '' }} value="{{ $author->id }}">{{ $author->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label class="form-check-label" for="select2-category-{{ $book->id }}">Category</label>
+                                                        <select name="category_id" class="select2 form-select" id="select2-category-{{ $book->id }}">
+                                                            @foreach($categories as $category)
+                                                                <option {{ $category->id === $book->category_id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-12 text-center">
+                                                        <button type="submit" class="btn btn-primary me-1 mt-2">Update</button>
+                                                        <button type="reset" class="btn btn-outline-secondary mt-2" data-bs-dismiss="modal" aria-label="Close">
+                                                            Cancel
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -98,6 +176,16 @@
 
 @section('script')
     <script>
+        $('.select2').each(function () {
+            var $this = $(this);
+            $this.wrap('<div class="position-relative"></div>');
+            $this.select2({
+                tags: true,
+                dropdownAutoWidth: true,
+                dropdownParent: $this.parent(),
+                width: '100%',
+            });
+        });
         $('.s-filter').each(function () {
             var $this = $(this);
             $this.wrap('<div class="position-relative"></div>');
