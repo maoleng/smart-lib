@@ -103,7 +103,7 @@ class DatabaseSeeder extends Seeder
                     $expected_return_at = Carbon::make($book_at)->addDay()->addMonth();
                     $actual_return_at = Carbon::make($book_at)->addDay()->addMonth()->subDays(random_int(10, 20));
                 } else {
-                    $book_at = $faker->dateTimeBetween('-45 days', '31 days');
+                    $book_at = $faker->dateTimeBetween('-45 days', '-31 days');
                     $borrow_at = Carbon::make($book_at)->addDay();
                     $expected_return_at = Carbon::make($book_at)->addDay()->addMonth();
                     $actual_return_at = null;
