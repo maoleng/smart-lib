@@ -58,7 +58,7 @@ class BookController extends Controller
     {
         $data = $request->validated();
 
-        $data['banner'] = $request->file('banner')->store('banners');
+        $data['banner'] = $request->file('banner')->storePublicly('banners');
         $data['slug'] = Str::slug($data['title']);
 
         Book::query()->create($data);
@@ -72,7 +72,7 @@ class BookController extends Controller
         $data['slug'] = Str::slug($data['title']);
 
         if (isset($data['banner'])) {
-            $data['banner'] = $request->file('banner')->store('banners');
+            $data['banner'] = $request->file('banner')->storePublicly('banners');
         }
 
         $book->update($data);
