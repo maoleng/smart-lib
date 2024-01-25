@@ -122,7 +122,7 @@
                 }).then(function (result) {
                     if (result.value) {
                         const form = $('<form>', {
-                            'action': `/admin/book-instance/${action === 'delete' ? '' : action + '/'}${bookInstanceId}/`,
+                            'action': `/admin/book-instance/${action === 'delete' ? '' : action + '/'}${bookInstanceId}`,
                             'method': 'POST'
                         }).append($('<input>', {'type': 'hidden', 'name': '_token', 'value': '{{ csrf_token() }}'}));
                         if (action === 'delete') {

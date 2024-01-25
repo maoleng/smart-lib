@@ -169,7 +169,7 @@
             }).then(function (result) {
                 if (result.value) {
                     const form = $('<form>', {
-                        'action': `/admin/book/${bookId}/`,
+                        'action': `/admin/book/${bookId}`,
                         'method': 'POST'
                     }).append($('<input>', {'type': 'hidden', 'name': '_method', 'value': 'DELETE'})).append($('<input>', {'type': 'hidden', 'name': '_token', 'value': '{{ csrf_token() }}'})).appendTo($('body'));
                     form.submit();
