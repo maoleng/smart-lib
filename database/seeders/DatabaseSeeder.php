@@ -86,22 +86,35 @@ class DatabaseSeeder extends Seeder
                     'code' => strtoupper(Str::random(4)),
                     'book_id' => $i,
                 ];
+
+                if ($status === BookStatus::WAIT_TO_PICK_UP) {
+                    $book_at = $faker->dateTimeBetween('-30 days');
+                    $borrow_at = null;
+                    $expected_return_at = null;
+                    $actual_return_at = null;
+                } elseif ($status === BookStatus::BORROWING) {
+                    $book_at = $faker->dateTimeBetween('-30 days');
+                    $borrow_at = Carbon::make($book_at)->addDay();
+                    $expected_return_at = Carbon::make($book_at)->addDay()->addMonth();
+                    $actual_return_at = null;
+                } elseif ($status === BookStatus::RETURNED) {
+                    $book_at = $faker->dateTimeBetween('-30 days');
+                    $borrow_at = Carbon::make($book_at)->addDay();
+                    $expected_return_at = Carbon::make($book_at)->addDay()->addMonth();
+                    $actual_return_at = Carbon::make($book_at)->addDay()->addMonth()->subDays(random_int(10, 20));
+                } else {
+                    $book_at = $faker->dateTimeBetween('-45 days');
+                    $borrow_at = Carbon::make($book_at)->addDay();
+                    $expected_return_at = Carbon::make($book_at)->addDay()->addMonth();
+                    $actual_return_at = null;
+                }
                 $borrows[] = [
                     'user_id' => $faker->randomElement($user_ids),
                     'book_instance_id' => ++$book_instances_id,
-                    'book_at' => $book_at = $faker->dateTimeBetween('-30 days'),
-                    'borrow_at' => match($status) {
-                        BookStatus::WAIT_TO_PICK_UP,
-                        BookStatus::BORROWING, BookStatus::RETURNED, BookStatus::EXPIRED => Carbon::make($book_at)->subDay(),
-                    },
-                    'expected_return_at' => match($status) {
-                        BookStatus::WAIT_TO_PICK_UP,
-                        BookStatus::BORROWING, BookStatus::RETURNED, BookStatus::EXPIRED => Carbon::make($book_at)->subDay()->addMonth(),
-                    },
-                    'actual_return_at' => match($status) {
-                        BookStatus::RETURNED => Carbon::make($book_at)->subDay()->addDays(random_int(10, 20)),
-                        default => null,
-                    },
+                    'book_at' => $book_at,
+                    'borrow_at' => $borrow_at,
+                    'expected_return_at' => $expected_return_at,
+                    'actual_return_at' => $actual_return_at,
                 ];
             }
         }
