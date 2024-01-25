@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BookStatus;
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\Borrow;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SiteController extends Controller
 {
@@ -34,6 +37,16 @@ class SiteController extends Controller
             'books' => $books,
             'authors' => Author::all(),
             'categories' => Category::all(),
+        ]);
+    }
+
+    public function me()
+    {
+        $borrows = Borrow::query()->where('user_id', Auth::id())
+            ->with('bookInstance.book')->orderByDesc('book_at')->paginate(9);
+
+        return view('app.me', [
+            'borrows' => $borrows,
         ]);
     }
 
