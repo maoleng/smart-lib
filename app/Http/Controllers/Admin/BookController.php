@@ -57,6 +57,7 @@ class BookController extends Controller
     public function store(BookRequest $request): RedirectResponse
     {
         $data = $request->validated();
+
         $data['banner'] = $request->file('banner')->store('banners');
         $data['slug'] = Str::slug($data['title']);
 

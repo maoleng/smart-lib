@@ -10,16 +10,20 @@ class BookRequest extends BaseRequest
 
     public function rules(): array
     {
+        $route = request()->route();
+        $action = $route->getActionMethod();
+        $book_id = $route->book?->id;
+
         return [
             'banner' => [
-                Route::getCurrentRoute()->getActionMethod() === 'store' ? 'required' : 'nullable',
+                $action === 'store' ? 'required' : 'nullable',
                 'image',
                 'mimes:jpeg,png,jpg,gif,svg',
                 'max:2048',
             ],
             'title' => [
                 'required',
-                'unique:App\Models\Book,title'
+                'unique:App\Models\Book,title'.($book_id ? ",$book_id" : ''),
             ],
             'description' => [
                 'required',
