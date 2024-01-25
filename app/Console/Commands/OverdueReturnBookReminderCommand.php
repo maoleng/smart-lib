@@ -26,7 +26,9 @@ class OverdueReturnBookReminderCommand extends Command
 
         foreach ($users as $user) {
             Mail::to($user->email)->send(new OverdueReminderMail($user->name, $user->borrows));
-            $user->borrows->update(['status' => BookStatus::EXPIRED]);
+            foreach ($user->borrows as $borrow) {
+                $borrow->update(['status' => BookStatus::EXPIRED]);
+            }
         }
     }
 }
