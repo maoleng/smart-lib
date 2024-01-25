@@ -44,7 +44,7 @@ class AuthController extends Controller
         User::query()->create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['name']),
+            'password' => bcrypt($data['password']),
             'role' => UserRole::USER,
         ]);
 
