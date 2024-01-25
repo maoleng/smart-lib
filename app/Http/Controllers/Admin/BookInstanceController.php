@@ -35,6 +35,20 @@ class BookInstanceController extends Controller
         session()->flash('success', 'Mark as returned successfully');
     }
 
+    public function pickUpBook(BookInstance $book_instance): void
+    {
+        if ($book_instance->status !== BookStatus::WAIT_TO_PICK_UP) {
+            session()->flash('error', 'Invalid status');
+
+            return;
+        }
+
+        $book_instance->update(['status' => BookStatus::BORROWING]);
+        $book_instance->borrows()->orderByDesc('book_at')->update(['borrow_at' => now(), 'actual_return_at' => now()->addMonth()]);
+
+        session()->flash('success', 'Mark as borrowing successfully');
+    }
+
     public function destroy(BookInstance $book_instance): void
     {
         if ($book_instance->status === BookStatus::BORROWING || $book_instance->status === BookStatus::EXPIRED) {

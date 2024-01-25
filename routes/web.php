@@ -39,6 +39,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => [MustLogin:
     Route::group(['prefix' => 'book-instance', 'as' => 'book-instance.'], function () {
         Route::post('/', [BookInstanceController::class, 'store'])->name('store');
         Route::post('/return/{book_instance}', [BookInstanceController::class, 'returnBook'])->name('return');
+        Route::post('/pick_up/{book_instance}', [BookInstanceController::class, 'pickUpBook'])->name('pick-up');
         Route::delete('/{book_instance}', [BookInstanceController::class, 'destroy'])->name('destroy');
     });
 

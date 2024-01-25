@@ -61,6 +61,8 @@
                             <td>
                                 @if ($status === BookStatus::BORROWING || $status === BookStatus::EXPIRED)
                                     <button type="button" class="btn-return btn btn-gradient-secondary">User return book</button>
+                                @elseif($status === BookStatus::WAIT_TO_PICK_UP)
+                                    <button type="button" class="btn-pick_up btn btn-gradient-primary">User pick up book</button>
                                 @else
                                     <button type="button" class="btn-delete btn btn-gradient-danger">Delete</button>
                                 @endif
@@ -103,60 +105,40 @@
 
 @section('script')
     <script>
-        $('.btn-return').on('click', function () {
-            const bookInstanceId = $(this).parent().parent().data('id')
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "User are returning book ?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes!',
-                customClass: {
-                    confirmButton: 'btn btn-primary',
-                    cancelButton: 'btn btn-outline-danger ms-1'
-                },
-                buttonsStyling: false
-            }).then(function (result) {
-                if (result.value) {
-                    $.ajax({
-                        type: 'POST',
-                        url: `/admin/book-instance/return/${bookInstanceId}/`,
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                        },
-                    }).then(function () {
-                        window.location.reload()
-                    })
-                }
+        function handleAction(action, message) {
+            $('.btn-' + action).on('click', function () {
+                const bookInstanceId = $(this).parent().parent().data('id');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes!',
+                    customClass: {
+                        confirmButton: 'btn btn-primary',
+                        cancelButton: 'btn btn-outline-danger ms-1'
+                    },
+                    buttonsStyling: false
+                }).then(function (result) {
+                    if (result.value) {
+                        const url = `/admin/book-instance/${action === 'delete' ? '' : action + '/'}${bookInstanceId}/`;
+                        const data = { _token: '{{ csrf_token() }}' };
+                        $.ajax({
+                            type: action === 'delete' ? 'DELETE' : 'POST',
+                            url: url,
+                            data: data,
+                        }).then(function () {
+                            window.location.reload();
+                        });
+                    }
+                });
             });
-        })
-        $('.btn-delete').on('click', function () {
-            const bookInstanceId = $(this).parent().parent().data('id')
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                customClass: {
-                    confirmButton: 'btn btn-primary',
-                    cancelButton: 'btn btn-outline-danger ms-1'
-                },
-                buttonsStyling: false
-            }).then(function (result) {
-                if (result.value) {
-                    $.ajax({
-                        type: 'DELETE',
-                        url: `/admin/book-instance/${bookInstanceId}/`,
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                        },
-                    }).then(function () {
-                        window.location.reload()
-                    })
-                }
-            });
-        })
+        }
+
+        handleAction('return', 'User are returning book ?');
+        handleAction('pick_up', 'User are picking up book ?');
+        handleAction('delete', "You won't be able to revert this!");
+
 
 
         $('.select2').each(function () {
