@@ -168,15 +168,11 @@
                 buttonsStyling: false
             }).then(function (result) {
                 if (result.value) {
-                    $.ajax({
-                        type: 'DELETE',
-                        url: `/admin/book/${bookId}/`,
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                        },
-                    }).then(function () {
-                        window.location.reload()
-                    })
+                    const form = $('<form>', {
+                        'action': `/admin/book/${bookId}/`,
+                        'method': 'POST'
+                    }).append($('<input>', {'type': 'hidden', 'name': '_method', 'value': 'DELETE'})).append($('<input>', {'type': 'hidden', 'name': '_token', 'value': '{{ csrf_token() }}'})).appendTo($('body'));
+                    form.submit();
                 }
             });
         })

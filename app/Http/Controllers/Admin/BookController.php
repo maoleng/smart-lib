@@ -80,12 +80,10 @@ class BookController extends Controller
         return back()->with('success', 'Update book successfully');
     }
 
-    public function destroy(Book $book): void
+    public function destroy(Book $book): RedirectResponse
     {
         if ($book->bookInstances()->whereIn('status', [BookStatus::BORROWING, BookStatus::EXPIRED])->get()->isNotEmpty()) {
-            session()->flash('error', 'There are book that still being borrowing');
-
-            return;
+            return back()->withErrors(['message', 'There are book that still being borrowing']);
         }
 
         $book->bookInstances()->each(function ($instance) {
@@ -94,7 +92,7 @@ class BookController extends Controller
         $book->bookInstances()->delete();
         $book->delete();
 
-        session()->flash('success', 'Delete book successfully');
+        return back()->with('success', 'Delete book successfully');
     }
 
 }

@@ -121,15 +121,14 @@
                     buttonsStyling: false
                 }).then(function (result) {
                     if (result.value) {
-                        const url = `/admin/book-instance/${action === 'delete' ? '' : action + '/'}${bookInstanceId}/`;
-                        const data = { _token: '{{ csrf_token() }}' };
-                        $.ajax({
-                            type: action === 'delete' ? 'DELETE' : 'POST',
-                            url: url,
-                            data: data,
-                        }).then(function () {
-                            window.location.reload();
-                        });
+                        const form = $('<form>', {
+                            'action': `/admin/book-instance/${action === 'delete' ? '' : action + '/'}${bookInstanceId}/`,
+                            'method': 'POST'
+                        }).append($('<input>', {'type': 'hidden', 'name': '_token', 'value': '{{ csrf_token() }}'}));
+                        if (action === 'delete') {
+                            form.append($('<input>', {'type': 'hidden', 'name': '_method', 'value': 'DELETE'}));
+                        }
+                        form.appendTo($('body')).submit();
                     }
                 });
             });

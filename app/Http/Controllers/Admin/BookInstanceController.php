@@ -21,45 +21,39 @@ class BookInstanceController extends Controller
         return back()->with('success', 'Create book instance successfully');
     }
 
-    public function returnBook(BookInstance $book_instance): void
+    public function returnBook(BookInstance $book_instance): RedirectResponse
     {
         if ($book_instance->status !== BookStatus::BORROWING && $book_instance->status !== BookStatus::EXPIRED) {
-            session()->flash('error', 'Invalid status');
-
-            return;
+            return back()->withErrors(['message', 'Invalid status']);
         }
 
         $book_instance->update(['status' => BookStatus::RETURNED]);
         $book_instance->borrows()->orderByDesc('book_at')->update(['actual_return_at' => now()]);
 
-        session()->flash('success', 'Mark as returned successfully');
+        return back()->with('success', 'Mark as returned successfully');
     }
 
-    public function pickUpBook(BookInstance $book_instance): void
+    public function pickUpBook(BookInstance $book_instance): RedirectResponse
     {
         if ($book_instance->status !== BookStatus::WAIT_TO_PICK_UP) {
-            session()->flash('error', 'Invalid status');
-
-            return;
+            return back()->withErrors(['message', 'Invalid status']);
         }
 
         $book_instance->update(['status' => BookStatus::BORROWING]);
         $book_instance->borrows()->orderByDesc('book_at')->update(['borrow_at' => now(), 'actual_return_at' => now()->addMonth()]);
 
-        session()->flash('success', 'Mark as borrowing successfully');
+        return back()->with('success', 'Mark as borrowing successfully');
     }
 
-    public function destroy(BookInstance $book_instance): void
+    public function destroy(BookInstance $book_instance): RedirectResponse
     {
         if ($book_instance->status === BookStatus::BORROWING || $book_instance->status === BookStatus::EXPIRED) {
-            session()->flash('error', 'There are book that still being borrowing');
-
-            return;
+            return back()->withErrors(['message', 'There are book that still being borrowing']);
         }
         $book_instance->borrows()->delete();
         $book_instance->delete();
 
-        session()->flash('success', 'Delete book instance successfully');
+        return back()->with('success', 'Delete book instance successfully');
     }
 
 }
