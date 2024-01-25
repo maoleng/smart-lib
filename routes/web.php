@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\SiteController;
+use App\Http\Middleware\MustBeAdmin;
 use App\Http\Middleware\MustLogin;
 use App\Http\Middleware\MustNotLogin;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +23,7 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], static function () {
     Route::get('/logout', [AuthController::class, 'logout'])->middleware(MustLogin::class)->name('logout');
 });
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => [MustLogin::class]], static function () {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => [MustLogin::class, MustBeAdmin::class]], static function () {
     Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
     });
