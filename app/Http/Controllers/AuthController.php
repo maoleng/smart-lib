@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Enums\UserRole;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Jobs\SendMail;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -27,7 +25,10 @@ class AuthController extends Controller
     public function loginProcess(LoginRequest $request): RedirectResponse
     {
         $credentials = $request->validated();
-        if (Auth::attempt($credentials, $request['remember'] === 'on')) {
+        $is_remember = $credentials['remember'] === 'on';
+        unset($credentials['remember']);
+
+        if (Auth::attempt($credentials, $is_remember)) {
             $request->session()->regenerate();
 
             return redirect()->route('index');
