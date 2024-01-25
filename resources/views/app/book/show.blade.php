@@ -121,8 +121,7 @@
                     buttonsStyling: false
                 }).then(function (result) {
                     if (result.value) {
-                        const baseUrl = `https://${window.location.host}`;
-                        const url = `${baseUrl}/admin/book-instance/${action === 'delete' ? '' : action + '/'}${bookInstanceId}/`;
+                        const url = `/admin/book-instance/${action === 'delete' ? '' : action + '/'}${bookInstanceId}/`;
                         const data = { _token: '{{ csrf_token() }}' };
                         $.ajax({
                             type: action === 'delete' ? 'DELETE' : 'POST',

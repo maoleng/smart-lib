@@ -168,10 +168,9 @@
                 buttonsStyling: false
             }).then(function (result) {
                 if (result.value) {
-                    const baseUrl = `https://${window.location.host}`;
                     $.ajax({
                         type: 'DELETE',
-                        url: `${baseUrl}/admin/book/${bookId}/`,
+                        url: `/admin/book/${bookId}/`,
                         data: {
                             _token: '{{ csrf_token() }}',
                         },
